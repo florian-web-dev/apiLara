@@ -21,10 +21,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('user',UserController::class);
-Route::apiResource('category',CategoryController::class);
-Route::apiResource('post',PostController::class);
+Route::group(
+    'api',
+    Route::apiResource('user', UserController::class),
+    Route::apiResource('category', CategoryController::class),
+    Route::apiResource('post', PostController::class),
+);
+
 // Route::apiResources([
 //     'posts'=> PostController::class,
 //     'bob.index' => PostController::class
 // ]);
+
+Route::resource('photos', PhotoController::class)->names([
+    'create' => 'photos.build'
+]);

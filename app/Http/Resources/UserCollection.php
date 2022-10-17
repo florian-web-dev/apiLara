@@ -20,6 +20,8 @@ class UserCollection extends ResourceCollection
             'links' => [
                 'self' => 'link-value',
             ],
+
         ];
     }
 }
+

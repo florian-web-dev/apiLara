@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PostCollection;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Resources\PostCollection;
+use App\Http\Requests\StorePostRequest;
 
 class PostController extends Controller
 {
@@ -21,7 +22,8 @@ class PostController extends Controller
         // return $posts->toJson(JSON_PRETTY_PRINT);
         // return Post::all();
 
-        return new PostCollection(Post::all());
+        // return new PostCollection(Post::all());
+        return new PostCollection(Post::orderByDesc('created_at')->get());
     }
 
     /**
@@ -30,23 +32,33 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        if(Post::create($request->all())){
+        // $imageName = $request->image->store('posts');
+
+        // $arrayStore = $request->all();
+        // $request->safe()->merge($arrayStore);
+
+        // foreach($validated as $validate){ }
+
+
+        if (Post::create($request->all())) {
             return response()->json([
                 'succes' => 'Post crée'
-            ],200);
-        }else{
-            return response()->toJson(JSON_PRETTY_PRINT);
+            ], 200);
+        } else {
+            return response();
         }
 
+
+        //------------------------- Note ---------------------
         // redirect()->route('profile', ['id' => 1]);
 
         // return response($content)
         //     ->header('Content-Type', $type)
         //     ->header('X-Header-One', 'Header Value')
         //     ->header('X-Header-Two', 'Header Value');
-
+        //---------------------------------------------------
 
     }
 
@@ -68,9 +80,9 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(StorePostRequest $request, Post $post)
     {
-        if ( $post->update($request->all()) ) {
+        if ($post->update($request->all())) {
             return response()->json([
                 'succes' => 'Post modifier'
             ], 200);
