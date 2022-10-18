@@ -33,6 +33,6 @@ Route::group(
 //     'bob.index' => PostController::class
 // ]);
 
-Route::resource('photos', PhotoController::class)->names([
-    'create' => 'photos.build'
-]);
+// Route::resource('photos', PhotoController::class)->names([
+//     'create' => 'photos.build'
+// ]);
