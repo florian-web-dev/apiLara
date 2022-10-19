@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserCollection;
 
 class UserController extends Controller
@@ -32,13 +33,25 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        $nbUser = User::all()->count();
+        $pw = $request->password;
+        $pwHash = Hash::make($pw);
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $pwHash,
+        ]);
+        $nbUserNew = User::all()->count();
 
-        if (User::create($request->all())) {
+        if ($nbUser != $nbUserNew) {
             return response()->json([
                 'succes' => 'User crée'
             ], 200);
-        }else {
-            return response();
+        } else {
+            return response()->json([
+                'error' => 'User no created',
+                'statut' => http_response_code(),
+            ]);
         }
     }
 
@@ -63,7 +76,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        if ( $user->update($request->all()) ) {
+        if ($user->update($request->all())) {
             return response()->json([
                 'succes' => 'User modifier'
             ], 200);

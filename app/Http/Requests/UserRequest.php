@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -32,6 +33,8 @@ class UserRequest extends FormRequest
             'name' => ['required', 'min:3', 'max:50'],
             'email' => ['email', 'required', Rule::unique('users', 'email')->ignore($this->user)],
             'password' =>['required','min:3']
+            // $password = Hash::make('password'),
+            // $password =>['required','min:3']
         ];
     }
 
@@ -40,9 +43,14 @@ class UserRequest extends FormRequest
         throw new HttpResponseException(
             response()->json([
                 'sucess' => 'false',
-                'massage' => 'Validation error',
+                'message' => 'Validation error',
                 'data' => $validator->errors(),
             ])
         );
     }
+
+    // protected function prepareForValidation()
+    // {
+    //     $this->request->Hash::make('password');
+    // }
 }

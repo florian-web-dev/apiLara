@@ -36,3 +36,14 @@ Route::group(
 // Route::resource('photos', PhotoController::class)->names([
 //     'create' => 'photos.build'
 // ]);
+
+Route::post('/tokens/create', function (Request $request){
+    $token = $request->user()->createToken($request->token_name);
+
+    return['token'=> $token->plainTextToken];
+});
+
+
+Route::get('/bob', function(){
+    return ['bobClef' => 'bobValue'];
+});
